@@ -1,93 +1,85 @@
-import EmployeeRepository from "../repositories/employee.repository.js";
-import UserRepository from "../repositories/user.repository.js";
-import DepartmentRepository from "../repositories/department.repository.js";
-
+import employeeRepository from "../repositories/employee.repository.js";
+import userRepository from "../repositories/user.repository.js";
+import departmentRepository from "../repositories/department.repository.js";
+import AppError from "../utils/AppError.js";
 import generateEmployeeCode from "../utils/generateEmployeeCode.js";
 
-import AppError from "../utils/AppError.js";
-
-const employeeRepository = new EmployeeRepository();
-const userRepository = new UserRepository();
-const departmentRepository = new DepartmentRepository();
+// const employeeRepository = new EmployeeRepository();
+// const userRepository = new UserRepository();
+// const departmentRepository = new DepartmentRepository();
 
 class EmployeeService {
-    async createEmployee(data, adminId) {
+async createEmployee(data, adminId) {
 
-        const user =
-            await userRepository.findById(data.user);
+    // 1. Check User
+    const user = await userRepository.findById(data.user);
 
-        if (!user) {
+    if (!user) {
 
-            throw new AppError(
-                "User not found",
-                404
-            );
+        throw new AppError(
+            "User not found",
+            404
+        );
 
-        }
+    }
 
-        const exists =
-            await employeeRepository.findOne({
+    // 2. Check if user already has an employee profile
+    const existingEmployee =
+        await employeeRepository.findOne({
+            user: data.user
+        });
 
-                user: data.user
+    if (existingEmployee) {
 
-            });
+        throw new AppError(
+            "This user already has an employee profile",
+            409
+        );
 
-        if (exists) {
+    }
 
-            throw new AppError(
-                "This user already has an employee profile",
-                400
-            );
+    // 3. Check Department
+    const department =
+        await departmentRepository.findById(
+            data.department
+        );
 
-        }
+    if (!department) {
 
-        const department =
-            await departmentRepository.findById(
-                data.department
-            );
+        throw new AppError(
+            "Department not found",
+            404
+        );
 
-        if (!department) {
+    }
 
-            throw new AppError(
-                "Department not found",
-                404
-            );
+    // 4. Department must be active
+    if (!department.isActive) {
 
-        }
+        throw new AppError(
+            "Department is inactive",
+            400
+        );
 
-        if (!department.isActive) {
+    }
 
-            throw new AppError(
-                "Department is inactive",
-                400
-            );
+    // 5. User must be active
+    if (!user.isActive) {
 
-        }
+        throw new AppError(
+            "User is inactive",
+            400
+        );
 
-        if (data.manager) {
+    }
 
-            const manager =
-                await employeeRepository.findById(
-                    data.manager
-                );
+    // 6. Generate Employee Code
+    const employeeCode =
+        await generateEmployeeCode();
 
-            if (!manager) {
-
-                throw new AppError(
-                    "Manager not found",
-                    404
-                );
-
-            }
-
-        }
-
-        const employeeCode =
-            await generateEmployeeCode(
-                employeeRepository
-            );
-
-        return await employeeRepository.create({
+    // 7. Create Employee
+    const employee =
+        await employeeRepository.create({
 
             ...data,
 
@@ -97,7 +89,9 @@ class EmployeeService {
 
         });
 
-    }
+    return employee;
+
+}
 
     async getEmployeeById(id) {
 
@@ -230,7 +224,14 @@ async deleteEmployee(id, adminId) {
         );
 
     }
+if (!employee.isActive) {
 
+    throw new AppError(
+        "Employee already inactive",
+        400
+    );
+
+}
     const subordinates = await employeeRepository.count({
 
         manager: id,
@@ -274,6 +275,14 @@ async restoreEmployee(id, adminId) {
         );
 
     }
+    if (employee.isActive) {
+
+    throw new AppError(
+        "Employee already active",
+        400
+    );
+
+}
 
     if (employee.department) {
 
@@ -476,3 +485,5 @@ async changeSalary(id, salary, adminId) {
 
 }
 }
+
+export default new EmployeeService();

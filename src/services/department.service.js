@@ -1,73 +1,63 @@
-import DepartmentRepository from "../repositories/department.repository.js";
-import UserRepository from "../repositories/user.repository.js";
+import departmentRepository from "../repositories/department.repository.js";
+import userRepository from "../repositories/user.repository.js";
 import AppError from "../utils/AppError.js";
 
-const departmentRepository = new DepartmentRepository();
-const userRepository = new UserRepository();
 class DepartmentService {
 
-    async createDepartment(data, userId) {
-  const code = data.code
-            .trim()
-            .toUpperCase();
-        const exists = await departmentRepository.findOne({
+async createDepartment(data, userId) {
 
-            $or: [
+    const exists = await departmentRepository.findOne({
+        $or: [
+            {
+                name: {
+                    $regex: `^${data.name.trim()}$`,
+                    $options: "i"
+                }
+            },
+            {
+                code: data.code.trim().toUpperCase()
+            }
+        ]
+    });
 
-                {
-                    name: {
-                        $regex: `^${data.name.trim()}$`,
-                        $options: "i"
-                    }
-                },
+    if (exists) {
 
-                { code: data.code }
+        throw new AppError(
+            "Department already exists",
+            400
+        );
 
-            ]
+    }
 
-        });
+    if (data.manager) {
 
-        if (exists) {
+        const manager =
+            await userRepository.findById(data.manager);
+
+        if (!manager) {
 
             throw new AppError(
-
-                "Department already exists",
-
-                400
-
+                "Manager not found",
+                404
             );
 
         }
 
-        if (data.manager) {
-
-            const manager = await userRepository.findById(data.manager);
-
-            if (!manager) {
-
-                throw new AppError(
-
-                    "Manager not found",
-
-                    404
-
-                );
-
-            }
-
-        }
-      
-
-        data.code = code;
-        return await departmentRepository.create({
-
-            ...data,
-
-            createdBy: userId
-
-        });
-
     }
+
+    data.code = data.code
+        .trim()
+        .toUpperCase();
+
+    return await departmentRepository.create({
+
+        ...data,
+
+        createdBy: userId
+
+    });
+
+}
 
 async updateDepartment(id, data, userId) {
 
@@ -101,11 +91,18 @@ async updateDepartment(id, data, userId) {
             });
         }
 
-        if (data.code) {
-            conditions.push({
-                code: data.code
-            });
-        }
+        const codeExists = await departmentRepository.findOne({
+    code: data.code
+});
+
+if (codeExists && codeExists._id.toString() !== id) {
+
+    throw new AppError(
+        "Department code already exists",
+        400
+    );
+
+}
 
         const exists = await departmentRepository.findOne({
             _id: { $ne: id },
@@ -268,8 +265,15 @@ async getDepartmentById(id) {
         if (!department) {
             throw new AppError("Department not found", 404);
         }
+if (!department.isActive) {
 
-        // 1- منع حذف القسم إذا كان يحتوي على مستخدمين
+    throw new AppError(
+        "Department already inactive",
+        400
+    );
+
+}
+
         const usersCount = await userRepository.count({
             department: id,
             isDeleted: false
@@ -282,7 +286,6 @@ async getDepartmentById(id) {
             );
         }
 
-        // 2- منع حذف القسم إذا كان له مدير
         if (department.manager) {
             throw new AppError(
                 "Remove or change the department manager first",
@@ -357,7 +360,6 @@ async getDepartmentById(id) {
         return await departmentRepository.save(department);
 
     }
-
 
     async removeManager(id, adminId) {
 

@@ -1,7 +1,6 @@
-import asyncHandler from "../middleware/asyncHandler.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import departmentService from "../services/department.service.js";
-import response from "../utils/apiResponse.js";
-
+import * as response from "../utils/apiResponse.js";
 
 export const getDepartments = asyncHandler(async (req, res) => {
 
@@ -20,63 +19,36 @@ export const getDepartments = asyncHandler(async (req, res) => {
 });
 
 export const getDepartmentById = asyncHandler(async (req, res) => {
-
     const department = await departmentService.getDepartmentById(
-
         req.params.id
-
     );
-
     response.success(
-
         res,
-
         department
-
     );
-
 });
 
 export const createDepartment = asyncHandler(async (req, res) => {
-
     const department = await departmentService.createDepartment(
-
         req.body,
-
         req.user._id
-
     );
-
     response.success(
-
         res,
-
         department,
-
         "Department created successfully",
-
         201
-
     );
-
 });
 
 export const updateDepartment = asyncHandler(async (req, res) => {
-
     const department = await departmentService.updateDepartment(
-
         req.params.id,
-
         req.body,
-
         req.user._id
-
     );
-
     response.success(
-
         res,
-
         department,
 
         "Department updated successfully"

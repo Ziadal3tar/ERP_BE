@@ -29,13 +29,10 @@ export const getUserById =
 
             );
 
-        res.json({
-
-            success: true,
-
-            data: user
-
-        });
+        response.success(
+    res,
+    user
+);
 
     });
 

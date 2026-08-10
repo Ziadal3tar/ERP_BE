@@ -32,25 +32,29 @@ class AuthService {
 
         const verificationUrl =
             `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-console.log("Before send email");
+
 
       await sendEmail(
     user.email,
-    "Test Email",
+    "Verify Your Email",
     `
-    <h1>Hello Ziad</h1>
+    <h1>Hello ${user.name}</h1>
     <p>If you received this email, everything is working correctly.</p>
     <p>${verificationUrl}</p>
     `
 );
 
-        console.log("After send email");
-        const token = generateToken(user._id);
 
-        return {
-            token,
-            user
-        };
+        const token = generateToken(user._id);
+return {
+  "success": true,
+  "message": "Please verify your email."
+}
+        // return {
+        //     token,
+        //     user
+        // };
+        
 
     }
     async verifyEmail(token) {
@@ -72,10 +76,10 @@ console.log("Before send email");
             throw new Error("Invalid token");
 
         }
-        if (!user.isVerified) {
+        if (user.isVerified) {
 
             throw new Error(
-                "Please verify your email"
+                "Email already verified"
             );
 
         }

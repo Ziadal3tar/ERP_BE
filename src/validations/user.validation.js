@@ -5,8 +5,7 @@ const roles = ["Admin", "Manager", "Employee"];
 const statuses = [
     "Active",
     "Inactive",
-    "Suspended",
-    "On Leave"
+    "Suspended"
 ];
 
 export const idValidation = [
@@ -46,16 +45,6 @@ export const createUserValidation = [
         .isIn(roles)
         .withMessage("Invalid role"),
 
-    body("jobTitle")
-        .optional()
-        .trim()
-        .isLength({ max: 100 }),
-
-    body("department")
-        .optional()
-        .isMongoId()
-        .withMessage("Invalid department id")
-
 ];
 
 export const updateUserValidation = [
@@ -77,14 +66,6 @@ export const updateUserValidation = [
         .optional()
         .isIn(statuses),
 
-    body("department")
-        .optional()
-        .isMongoId(),
-
-    body("jobTitle")
-        .optional()
-        .trim()
-        .isLength({ max: 100 })
 
 ];
 

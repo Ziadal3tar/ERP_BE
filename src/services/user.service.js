@@ -1,5 +1,5 @@
 import userRepository from "../repositories/user.repository.js";
-import generateEmployeeCode from "../utils/generateEmployeeCode.js";
+
 import AppError from "../utils/AppError.js";
 class UserService {
 
@@ -93,10 +93,7 @@ class UserService {
                 limit,
 
                 sort,
-
-                populate: "department"
-
-            }
+           }
 
         );
 
@@ -131,8 +128,6 @@ class UserService {
 
                 populate: [
 
-                    "department",
-
                     "createdBy",
 
                     "updatedBy"
@@ -166,13 +161,6 @@ class UserService {
             userId,
 
             {
-
-                populate: [
-
-                    "department"
-
-                ]
-
             }
 
         );
@@ -194,7 +182,6 @@ class UserService {
     }
 
     async createUser(data, adminId) {
-
         const exists =
             await userRepository.exists({
 
@@ -204,7 +191,6 @@ class UserService {
 
         if (exists) {
 
-
             throw new AppError(
 
                 "Email already exists",
@@ -213,9 +199,6 @@ class UserService {
 
             );
         }
-
-        data.employeeCode =
-            await generateEmployeeCode();
 
         data.createdBy = adminId;
 
@@ -227,7 +210,6 @@ class UserService {
         return user;
 
     }
-
 
     async updateProfile(userId, data) {
 

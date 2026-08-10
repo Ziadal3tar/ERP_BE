@@ -1,11 +1,8 @@
-import { validationResult } from "express-validator";
+// import { validationResult } from "express-validator";
 import asyncHandler from "../utils/asyncHandler.js";
 import authService from "../services/auth.service.js";
 
-
 export const register = asyncHandler(async (req, res) => {
-
-    
 
     const result = await authService.register(req.body);
 
@@ -16,8 +13,7 @@ export const register = asyncHandler(async (req, res) => {
     });
 
 });
-export const verifyEmail =
-asyncHandler(async(req,res)=>{
+export const verifyEmail = asyncHandler(async(req,res)=>{
 
     await authService.verifyEmail(
 
@@ -36,12 +32,17 @@ asyncHandler(async(req,res)=>{
 });
 export const login = asyncHandler(async (req, res) => {
 
-    
-
     const result = await authService.login(
-        req.body.email,
-        req.body.password
-    );
+
+    req.body.email,
+
+    req.body.password,
+
+    req.ip,
+
+    req.get("user-agent")
+
+);
 
    res.cookie(
 
@@ -136,8 +137,6 @@ export const profile = asyncHandler(async (req, res) => {
 
 export const forgotPassword = asyncHandler(async (req, res) => {
 
-    
-
     await authService.forgotPassword(req.body.email);
 
     res.status(200).json({
@@ -148,8 +147,6 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 });
 
 export const resetPassword = asyncHandler(async (req, res) => {
-
-    
 
     await authService.resetPassword(
         req.params.token,
@@ -164,8 +161,6 @@ export const resetPassword = asyncHandler(async (req, res) => {
 });
 
 export const changePassword = asyncHandler(async (req, res) => {
-
-    
 
     await authService.changePassword(
         req.user._id,

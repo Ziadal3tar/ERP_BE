@@ -1,6 +1,7 @@
-import asyncHandler from "../middleware/asyncHandler.js";
+import asyncHandler from "../utils/asyncHandler.js";
+
 import employeeService from "../services/employee.service.js";
-import response from "../utils/apiResponse.js";
+import * as response from "../utils/apiResponse.js";
 
 export const getEmployees = asyncHandler(async (req, res) => {
 

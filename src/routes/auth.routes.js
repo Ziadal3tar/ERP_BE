@@ -1,6 +1,6 @@
 import express from "express";
 import auth from "../middleware/auth.middleware.js";
-
+import validate from "../middleware/validate.js";
 import {
     register,
     login,
@@ -29,7 +29,12 @@ const router = express.Router();
 
 // Authentication
 router.post("/register", registerValidation, register);
-router.post("/login", loginValidation, login);
+router.post(
+    "/login",
+    loginValidation,
+    validate,
+    login
+);
 router.post("/logout", logout);
 // router.post("/logout-all", auth, logoutAll);
 router.post("/refresh-token", refreshToken);

@@ -6,8 +6,7 @@ const auth = async (req, res, next) => {
     try {
 
         const authHeader = req.headers.authorization;
-console.log(req.headers);
-console.log(req.headers.authorization);
+
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
 
             return res.status(401).json({

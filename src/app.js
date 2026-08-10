@@ -7,48 +7,65 @@ import helmet from "helmet";
 import compression from "compression";
 // import mongoSanitize from "express-mongo-sanitize";
 
-
 const app = express();
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.originalUrl}`);
-    next();
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
 });
+app.use(helmet());
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
-app.use(helmet());
-
-app.use(compression());
 
 // app.use(mongoSanitize());
 const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
 
-    windowMs: 15 * 60 * 1000,
+  max: 5,
 
-    max: 5,
-
-    message: "Too many login attempts"
-
+  message: "Too many login attempts",
 });
 app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
 
-    res.status(200).json({
-
-        success: true,
-
-        message: "ERP API Running"
-
-    });
-
+    message: "ERP API Running",
+  });
 });
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import departmentsRoutes from "./routes/department.routes.js";
+import employeeRoutes from "./routes/employee.routes.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
+import leaveRoutes from "./routes/leave.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
+import productRoutes from "./routes/product.routes.js";
+import warehouseRoutes from "./routes/warehouse.routes.js";
+import stockRoutes
+    from "./routes/stock.routes.js";
+    import supplierRoutes
+    from "./routes/supplier.routes.js";
 
-app.use("/api/users", userRoutes);
+app.use(
+    "/api/suppliers",
+    supplierRoutes
+);
 app.use("/api/auth", authRoutes);
-
+app.use("/api/users", userRoutes);
+app.use("/api/departments", departmentsRoutes);
+app.use("/api/employees", employeeRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/leaves", leaveRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/warehouses", warehouseRoutes);
+app.use(
+    "/api/stock",
+    stockRoutes
+);
 app.use(errorHandler);
 export default app;

@@ -1,23 +1,40 @@
-import userRepository from "../repositories/user.repository.js";
+import employeeRepository from "../repositories/employee.repository.js";
 
 const generateEmployeeCode = async () => {
 
-    const lastUser =
-        await userRepository.findLastEmployee();
+    const lastEmployee = await employeeRepository.find(
+        {
+            employeeCode: {
+                $regex: /^EMP-\d+$/
+            }
+        },
+        {
+            sort: {
+                employeeCode: -1
+            },
+            limit: 1
+        }
+    );
 
-    if (!lastUser || !lastUser.employeeCode) {
+    if (!lastEmployee.length) {
 
         return "EMP-00001";
 
     }
 
-    const number = Number(
+    const lastCode =
+        lastEmployee[0].employeeCode;
 
-        lastUser.employeeCode.split("-")[1]
+    const lastNumber =
+        parseInt(
+            lastCode.replace("EMP-", ""),
+            10
+        );
 
-    );
+    const nextNumber =
+        lastNumber + 1;
 
-    return `EMP-${String(number + 1).padStart(5, "0")}`;
+    return `EMP-${String(nextNumber).padStart(5, "0")}`;
 
 };
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as departmentController from "../controllers/department.controller.js";
-import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.middleware.js";
 import authorize from "../middleware/authorize.js";
 import validate from "../middleware/validate.js";
 
@@ -23,7 +23,7 @@ router.get(
 );
 
 router.post(
-    "/",
+    "/createDepartment",
     auth,
     authorize("Admin"),
     createDepartmentValidation,
