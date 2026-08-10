@@ -45,15 +45,19 @@ import leaveRoutes from "./routes/leave.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import warehouseRoutes from "./routes/warehouse.routes.js";
-import stockRoutes
-    from "./routes/stock.routes.js";
-    import supplierRoutes
-    from "./routes/supplier.routes.js";
+import stockRoutes from "./routes/stock.routes.js";
+import supplierRoutes from "./routes/supplier.routes.js";
+import purchaseRoutes from "./routes/purchase.routes.js";
+import customerRoutes from "./routes/customer.routes.js";
+import saleRoutes from "./routes/sale.routes.js";
+import invoiceRoutes
+    from "./routes/invoice.routes.js";
 
 app.use(
-    "/api/suppliers",
-    supplierRoutes
+    "/api/invoices",
+    invoiceRoutes
 );
+app.use("/api/suppliers", supplierRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/departments", departmentsRoutes);
@@ -63,9 +67,9 @@ app.use("/api/leaves", leaveRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/warehouses", warehouseRoutes);
-app.use(
-    "/api/stock",
-    stockRoutes
-);
+app.use("/api/stock", stockRoutes);
+app.use("/api/purchases", purchaseRoutes);
+app.use("/api/customers", customerRoutes);
+app.use("/api/sales", saleRoutes);
 app.use(errorHandler);
 export default app;

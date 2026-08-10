@@ -43,14 +43,13 @@ class BaseRepository {
 
     }
 
-    async findById(id, options = {}) {
+  async findById(id, options = {}) {
 
-        return this.findOne(
-            { _id: id },
-            options
-        );
+    return this.model
+        .findById(id)
+        .setOptions(options);
 
-    }
+}
 
     async create(data) {
 

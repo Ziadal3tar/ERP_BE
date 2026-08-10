@@ -7,12 +7,6 @@ const attendanceStatuses = [
     "Leave"
 ];
 
-/*
-|--------------------------------------------------------------------------
-| ID Validation
-|--------------------------------------------------------------------------
-*/
-
 export const idValidation = [
 
     param("id")
@@ -20,20 +14,6 @@ export const idValidation = [
         .withMessage("Invalid attendance id")
 
 ];
-
-
-/*
-|--------------------------------------------------------------------------
-| Check In Validation
-|--------------------------------------------------------------------------
-|
-| Employee:
-| لا يرسل employeeId، لأننا سنعرف الموظف من req.user
-|
-| Admin / HR:
-| يمكنه تحديد employeeId
-|
-*/
 
 export const checkInValidation = [
 
@@ -52,13 +32,6 @@ export const checkInValidation = [
 
 ];
 
-
-/*
-|--------------------------------------------------------------------------
-| Check Out Validation
-|--------------------------------------------------------------------------
-*/
-
 export const checkOutValidation = [
 
     body("notes")
@@ -71,15 +44,6 @@ export const checkOutValidation = [
 
 ];
 
-
-/*
-|--------------------------------------------------------------------------
-| Create Attendance
-|--------------------------------------------------------------------------
-|
-| خاص بالـ Admin / HR
-|
-*/
 
 export const createAttendanceValidation = [
 
@@ -116,16 +80,6 @@ export const createAttendanceValidation = [
 
 ];
 
-
-/*
-|--------------------------------------------------------------------------
-| Update Attendance
-|--------------------------------------------------------------------------
-|
-| Admin / HR
-|
-*/
-
 export const updateAttendanceValidation = [
 
     body("date")
@@ -157,13 +111,6 @@ export const updateAttendanceValidation = [
         )
 
 ];
-
-
-/*
-|--------------------------------------------------------------------------
-| Get Attendance Validation
-|--------------------------------------------------------------------------
-*/
 
 export const getAttendanceValidation = [
 

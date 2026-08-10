@@ -16,11 +16,7 @@ import AppError from "../utils/AppError.js";
 
 class StockService {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate Product
-    |--------------------------------------------------------------------------
-    */
+
 
     async validateProduct(productId) {
 
@@ -51,12 +47,6 @@ class StockService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate Warehouse
-    |--------------------------------------------------------------------------
-    */
-
     async validateWarehouse(warehouseId) {
 
         const warehouse =
@@ -86,12 +76,6 @@ class StockService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Stock IN
-    |--------------------------------------------------------------------------
-    */
-
     async stockIn(data, userId) {
 
         await this.validateProduct(
@@ -102,10 +86,6 @@ class StockService {
             data.warehouse
         );
 
-        /*
-         * Find existing stock
-         */
-
         let stock =
             await stockRepository.findOne({
 
@@ -114,10 +94,6 @@ class StockService {
                 warehouse: data.warehouse
 
             });
-
-        /*
-         * Create stock if it doesn't exist
-         */
 
         if (!stock) {
 
@@ -136,10 +112,6 @@ class StockService {
 
         }
 
-        /*
-         * Increase quantity
-         */
-
         stock.quantity += Number(
             data.quantity
         );
@@ -147,10 +119,6 @@ class StockService {
         stock.updatedBy = userId;
 
         await stockRepository.save(stock);
-
-        /*
-         * Create history
-         */
 
         const transaction =
             await stockTransactionRepository.create({
@@ -182,12 +150,6 @@ class StockService {
         };
 
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Stock OUT
-    |--------------------------------------------------------------------------
-    */
 
     async stockOut(data, userId) {
 
@@ -222,10 +184,6 @@ class StockService {
 
         const quantity =
             Number(data.quantity);
-
-        /*
-         * Prevent negative stock
-         */
 
         if (stock.quantity < quantity) {
 
@@ -276,12 +234,6 @@ class StockService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Stock Transfer
-    |--------------------------------------------------------------------------
-    */
-
     async transferStock(data, userId) {
 
         const {
@@ -298,11 +250,6 @@ class StockService {
             notes
 
         } = data;
-
-        /*
-         * Source and destination
-         * cannot be the same
-         */
 
         if (
             fromWarehouse ===
@@ -332,20 +279,12 @@ class StockService {
         const amount =
             Number(quantity);
 
-        /*
-         * Start MongoDB Transaction
-         */
-
         const session =
             await mongoose.startSession();
 
         try {
 
             session.startTransaction();
-
-            /*
-             * Get source stock
-             */
 
             const sourceStock =
                 await stockRepository.findOne(
@@ -376,10 +315,6 @@ class StockService {
 
             }
 
-            /*
-             * Check quantity
-             */
-
             if (
                 sourceStock.quantity <
                 amount
@@ -394,10 +329,6 @@ class StockService {
                 );
 
             }
-
-            /*
-             * Get destination stock
-             */
 
             let destinationStock =
                 await stockRepository.findOne(
@@ -415,11 +346,6 @@ class StockService {
                     }
 
                 );
-
-            /*
-             * Create destination stock
-             * if necessary
-             */
 
             if (!destinationStock) {
 
@@ -446,10 +372,6 @@ class StockService {
                     );
 
             }
-
-            /*
-             * Update quantities
-             */
 
             sourceStock.quantity -= amount;
 
@@ -478,10 +400,6 @@ class StockService {
                 }
 
             );
-
-            /*
-             * History - OUT
-             */
 
             const transferOut =
                 await stockTransactionRepository.create(
@@ -515,10 +433,6 @@ class StockService {
 
                 );
 
-            /*
-             * History - IN
-             */
-
             const transferIn =
                 await stockTransactionRepository.create(
 
@@ -551,10 +465,6 @@ class StockService {
 
                 );
 
-            /*
-             * Commit
-             */
-
             await session.commitTransaction();
 
             return {
@@ -575,10 +485,6 @@ class StockService {
 
         } catch (error) {
 
-            /*
-             * Rollback everything
-             */
-
             await session.abortTransaction();
 
             throw error;
@@ -590,12 +496,6 @@ class StockService {
         }
 
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Get Stock
-    |--------------------------------------------------------------------------
-    */
 
     async getStock(query = {}) {
 
@@ -691,11 +591,6 @@ class StockService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Get Stock History
-    |--------------------------------------------------------------------------
-    */
 
     async getStockHistory(query = {}) {
 

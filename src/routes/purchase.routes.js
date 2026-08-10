@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import * as productController
-    from "../controllers/product.controller.js";
+import * as purchaseController
+    from "../controllers/purchase.controller.js";
 
 import auth from "../middleware/auth.middleware.js";
 import authorize from "../middleware/authorize.js";
@@ -9,12 +9,13 @@ import validate from "../middleware/validate.js";
 
 import {
     idValidation,
-    createProductValidation,
-    updateProductValidation,
-    getProductsValidation
-} from "../validations/product.validation.js";
+    createPurchaseValidation,
+    getPurchasesValidation
+} from "../validations/purchase.validation.js";
 
 const router = Router();
+
+
 
 router.get(
 
@@ -22,11 +23,11 @@ router.get(
 
     auth,
 
-    getProductsValidation,
+    getPurchasesValidation,
 
     validate,
 
-    productController.getProducts
+    purchaseController.getPurchases
 
 );
 
@@ -38,11 +39,11 @@ router.post(
 
     authorize("Admin"),
 
-    createProductValidation,
+    createPurchaseValidation,
 
     validate,
 
-    productController.createProduct
+    purchaseController.createPurchase
 
 );
 
@@ -56,47 +57,13 @@ router.get(
 
     validate,
 
-    productController.getProductById
-
-);
-
-router.put(
-
-    "/:id",
-
-    auth,
-
-    authorize("Admin"),
-
-    idValidation,
-
-    updateProductValidation,
-
-    validate,
-
-    productController.updateProduct
-
-);
-
-router.delete(
-
-    "/:id",
-
-    auth,
-
-    authorize("Admin"),
-
-    idValidation,
-
-    validate,
-
-    productController.deleteProduct
+    purchaseController.getPurchaseById
 
 );
 
 router.patch(
 
-    "/:id/",
+    "/:id/confirm",
 
     auth,
 
@@ -106,7 +73,39 @@ router.patch(
 
     validate,
 
-    productController.restoreProduct
+    purchaseController.confirmPurchase
+
+);
+
+router.patch(
+
+    "/:id/receive",
+
+    auth,
+
+    authorize("Admin"),
+
+    idValidation,
+
+    validate,
+
+    purchaseController.receivePurchase
+
+);
+
+router.patch(
+
+    "/:id/cancel",
+
+    auth,
+
+    authorize("Admin"),
+
+    idValidation,
+
+    validate,
+
+    purchaseController.cancelPurchase
 
 );
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import * as productController
-    from "../controllers/product.controller.js";
+import * as customerController
+    from "../controllers/customer.controller.js";
 
 import auth from "../middleware/auth.middleware.js";
 import authorize from "../middleware/authorize.js";
@@ -9,105 +9,64 @@ import validate from "../middleware/validate.js";
 
 import {
     idValidation,
-    createProductValidation,
-    updateProductValidation,
-    getProductsValidation
-} from "../validations/product.validation.js";
+    createCustomerValidation,
+    updateCustomerValidation,
+    getCustomersValidation
+} from "../validations/customer.validation.js";
 
 const router = Router();
 
 router.get(
-
     "/",
-
     auth,
-
-    getProductsValidation,
-
+    getCustomersValidation,
     validate,
-
-    productController.getProducts
-
+    customerController.getCustomers
 );
 
 router.post(
-
     "/",
-
     auth,
-
     authorize("Admin"),
-
-    createProductValidation,
-
+    createCustomerValidation,
     validate,
-
-    productController.createProduct
-
+    customerController.createCustomer
 );
 
 router.get(
-
     "/:id",
-
     auth,
-
     idValidation,
-
     validate,
-
-    productController.getProductById
-
+    customerController.getCustomerById
 );
 
 router.put(
-
     "/:id",
-
     auth,
-
     authorize("Admin"),
-
     idValidation,
-
-    updateProductValidation,
-
+    updateCustomerValidation,
     validate,
-
-    productController.updateProduct
-
+    customerController.updateCustomer
 );
 
 router.delete(
-
     "/:id",
-
     auth,
-
     authorize("Admin"),
-
     idValidation,
-
     validate,
-
-    productController.deleteProduct
-
+    customerController.deleteCustomer
 );
 
 router.patch(
-
-    "/:id/",
-
+    "/:id/restore",
     auth,
-
     authorize("Admin"),
-
     idValidation,
-
     validate,
-
-    productController.restoreProduct
-
+    customerController.restoreCustomer
 );
 
 export default router;

@@ -5,19 +5,9 @@ import AppError from "../utils/AppError.js";
 
 class ProductService {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Create Product
-    |--------------------------------------------------------------------------
-    */
-
     async createProduct(data, userId) {
 
         const sku = data.sku.toUpperCase();
-
-        /*
-         * Check duplicate SKU
-         */
 
         const existingSku =
             await productRepository.findOne({
@@ -37,10 +27,6 @@ class ProductService {
             );
 
         }
-
-        /*
-         * Check duplicate barcode
-         */
 
         if (data.barcode) {
 
@@ -64,10 +50,6 @@ class ProductService {
             }
 
         }
-
-        /*
-         * Check category
-         */
 
         const category =
             await categoryRepository.findById(
@@ -100,10 +82,6 @@ class ProductService {
 
         }
 
-        /*
-         * Create Product
-         */
-
         return await productRepository.create({
 
             ...data,
@@ -115,12 +93,6 @@ class ProductService {
         });
 
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Get Products
-    |--------------------------------------------------------------------------
-    */
 
     async getProducts(query = {}) {
 
@@ -134,10 +106,6 @@ class ProductService {
             (page - 1) * limit;
 
         const filter = {};
-
-        /*
-         * Search
-         */
 
         if (query.search) {
 
@@ -168,20 +136,12 @@ class ProductService {
 
         }
 
-        /*
-         * Category filter
-         */
-
         if (query.category) {
 
             filter.category =
                 query.category;
 
         }
-
-        /*
-         * Active filter
-         */
 
         if (
             query.isActive !== undefined
@@ -271,12 +231,6 @@ class ProductService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Get Product By ID
-    |--------------------------------------------------------------------------
-    */
-
     async getProductById(id) {
 
         const product =
@@ -339,12 +293,6 @@ class ProductService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Update Product
-    |--------------------------------------------------------------------------
-    */
-
     async updateProduct(id, data, userId) {
 
         const product =
@@ -361,10 +309,6 @@ class ProductService {
             );
 
         }
-
-        /*
-         * SKU
-         */
 
         if (data.sku) {
 
@@ -399,10 +343,6 @@ class ProductService {
             product.sku = sku;
 
         }
-
-        /*
-         * Barcode
-         */
 
         if (
             data.barcode !== undefined
@@ -446,10 +386,6 @@ class ProductService {
 
         }
 
-        /*
-         * Category
-         */
-
         if (data.category) {
 
             const category =
@@ -487,10 +423,6 @@ class ProductService {
                 data.category;
 
         }
-
-        /*
-         * Allowed fields
-         */
 
         const allowedFields = [
 
@@ -534,12 +466,6 @@ class ProductService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Delete Product
-    |--------------------------------------------------------------------------
-    */
-
     async deleteProduct(id, userId) {
 
         const product =
@@ -581,12 +507,6 @@ class ProductService {
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Restore Product
-    |--------------------------------------------------------------------------
-    */
-
     async restoreProduct(id, userId) {
 
         const product =
@@ -615,10 +535,6 @@ class ProductService {
             );
 
         }
-
-        /*
-         * Category must still be active
-         */
 
         const category =
             await categoryRepository.findById(
