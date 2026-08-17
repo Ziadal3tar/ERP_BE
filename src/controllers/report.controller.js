@@ -7,11 +7,7 @@ import reportService
 import * as response
     from "../utils/apiResponse.js";
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
+
 
 export const getDashboardSummary =
     asyncHandler(
@@ -29,11 +25,7 @@ export const getDashboardSummary =
         }
     );
 
-/*
-|--------------------------------------------------------------------------
-| Sales Report
-|--------------------------------------------------------------------------
-*/
+
 
 export const getSalesReport =
     asyncHandler(
@@ -53,11 +45,7 @@ export const getSalesReport =
         }
     );
 
-/*
-|--------------------------------------------------------------------------
-| Purchases Report
-|--------------------------------------------------------------------------
-*/
+
 
 export const getPurchasesReport =
     asyncHandler(
@@ -77,11 +65,7 @@ export const getPurchasesReport =
         }
     );
 
-/*
-|--------------------------------------------------------------------------
-| Stock Report
-|--------------------------------------------------------------------------
-*/
+
 
 export const getStockReport =
     asyncHandler(
@@ -99,11 +83,7 @@ export const getStockReport =
         }
     );
 
-/*
-|--------------------------------------------------------------------------
-| Low Stock
-|--------------------------------------------------------------------------
-*/
+
 
 export const getLowStock =
     asyncHandler(
