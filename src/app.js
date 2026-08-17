@@ -13,7 +13,12 @@ app.use((req, res, next) => {
   next();
 });
 app.use(helmet());
-app.use(cors());
+app.use(
+    cors({
+        origin: '*',
+        credentials: true
+    })
+);
 app.use(compression());
 app.use(express.json());
 
@@ -50,13 +55,17 @@ import supplierRoutes from "./routes/supplier.routes.js";
 import purchaseRoutes from "./routes/purchase.routes.js";
 import customerRoutes from "./routes/customer.routes.js";
 import saleRoutes from "./routes/sale.routes.js";
-import invoiceRoutes
-    from "./routes/invoice.routes.js";
+import invoiceRoutes from "./routes/invoice.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
+import reportRoutes from "./routes/report.routes.js";
+import auditLogRoutes from "./routes/auditLog.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
-app.use(
-    "/api/invoices",
-    invoiceRoutes
-);
+app.use("/api/audit-logs", auditLogRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/invoices", invoiceRoutes);
 app.use("/api/suppliers", supplierRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
