@@ -92,7 +92,167 @@ async createEmployee(data, adminId) {
     return employee;
 
 }
+async getEmployees(query = {}) {
 
+    const page =
+        Number(query.page) || 1;
+
+    const limit =
+        Number(query.limit) || 10;
+
+    const skip =
+        (page - 1) * limit;
+
+    const filter = {};
+
+    /*
+    |--------------------------------------------------------------------------
+    | Search
+    |--------------------------------------------------------------------------
+    */
+
+    if (query.search) {
+
+        filter.$or = [
+
+            {
+                employeeCode: {
+                    $regex: query.search,
+                    $options: "i"
+                }
+            },
+
+            {
+                jobTitle: {
+                    $regex: query.search,
+                    $options: "i"
+                }
+            }
+
+        ];
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Department Filter
+    |--------------------------------------------------------------------------
+    */
+
+    if (query.department) {
+
+        filter.department =
+            query.department;
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Active Filter
+    |--------------------------------------------------------------------------
+    */
+
+    if (query.isActive !== undefined) {
+
+        filter.isActive =
+            query.isActive === "true";
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total
+    |--------------------------------------------------------------------------
+    */
+
+    const total =
+        await employeeRepository.count(
+            filter
+        );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Employees
+    |--------------------------------------------------------------------------
+    */
+
+    const employees =
+        await employeeRepository.find(
+
+            filter,
+
+            {
+
+                skip,
+
+                limit,
+
+                sort: {
+                    createdAt: -1
+                },
+
+                populate: [
+
+                    {
+                        path: "user",
+
+                        select:
+                            "name email role isActive"
+
+                    },
+
+                    {
+                        path: "department",
+
+                        select:
+                            "name code"
+
+                    },
+
+                    {
+                        path: "createdBy",
+
+                        select:
+                            "name email"
+
+                    },
+
+                    {
+                        path: "updatedBy",
+
+                        select:
+                            "name email"
+
+                    }
+
+                ]
+
+            }
+
+        );
+
+    return {
+
+        data: employees,
+
+        pagination: {
+
+            total,
+
+            page,
+
+            limit,
+
+            totalPages:
+                Math.ceil(
+                    total / limit
+                )
+
+        }
+
+    };
+
+}
     async getEmployeeById(id) {
 
         const employee =

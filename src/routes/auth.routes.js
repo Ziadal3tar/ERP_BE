@@ -1,6 +1,16 @@
 import express from "express";
 import auth from "../middleware/auth.middleware.js";
 import validate from "../middleware/validate.js";
+import rateLimit from "express-rate-limit";
+
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: {
+        success: false,
+        message: "Too many login attempts"
+    }
+});
 import {
     register,
     login,
@@ -32,6 +42,7 @@ router.post("/register", registerValidation, register);
 router.post(
     "/login",
     loginValidation,
+    loginLimiter,
     validate,
     login
 );

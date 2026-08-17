@@ -1,0 +1,55 @@
+# ERP Management System
+
+Full-stack ERP management system built with:
+
+- Angular
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+
+## Modules
+
+- Authentication
+- Users
+- Departments
+- Employees
+- Attendance
+- Leaves
+- Products
+- Warehouses
+- Stock
+- Suppliers
+- Purchases
+- Customers
+- Sales
+- Invoices
+- Payments
+- Reports
+- Audit Logs
+- Notifications
+
+## Main Business Flows
+
+### Purchase
+
+Supplier
+→ Purchase
+→ Confirm
+→ Receive
+→ Stock IN
+
+### Sales
+
+Customer
+→ Sale
+→ Confirm
+→ Stock OUT
+
+### Payments
+
+Sale
+→ Invoice
+→ Payment
+→ Paid / Partially Paid

@@ -96,7 +96,7 @@ router.delete(
 
 router.patch(
 
-    "/:id/",
+    "/:id/restore",
 
     auth,
 

@@ -211,47 +211,47 @@ class UserService {
 
     }
 
-    async updateProfile(userId, data) {
+    // async updateProfile(userId, data) {
 
-        const user = await userRepository.findById(userId);
+    //     const user = await userRepository.findById(userId);
 
-        if (!user) {
+    //     if (!user) {
 
-            throw new AppError(
+    //         throw new AppError(
 
-                "User not found",
+    //             "User not found",
 
-                404
+    //             404
 
-            );
+    //         );
 
-        }
+    //     }
 
-        const allowedFields = [
+    //     const allowedFields = [
 
-            "name",
+    //         "name",
 
-            "phone",
+    //         "phone",
 
-            "avatar"
+    //         "avatar"
 
-        ];
+    //     ];
 
-        allowedFields.forEach(field => {
+    //     allowedFields.forEach(field => {
 
-            if (data[field] !== undefined) {
+    //         if (data[field] !== undefined) {
 
-                user[field] = data[field];
+    //             user[field] = data[field];
 
-            }
+    //         }
 
-        });
+    //     });
 
-        await userRepository.save(user);
+    //     await userRepository.save(user);
 
-        return user;
+    //     return user;
 
-    }
+    // }
     async updateProfile(userId, data) {
 
         const user = await userRepository.findById(userId);

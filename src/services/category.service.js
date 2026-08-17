@@ -275,6 +275,7 @@ class CategoryService {
     }
 
     async updateCategory(id, data, userId) {
+console.log(data);
 
         const category =
             await categoryRepository.findById(id);

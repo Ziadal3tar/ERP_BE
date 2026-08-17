@@ -82,7 +82,7 @@ export const createUser =
 
 export const updateUser = asyncHandler(async (req, res) => {
 
-    const user = await userService.updateUser(
+    const user = await userService.updateProfile(
 
         req.params.id,
         req.body,

@@ -9,6 +9,7 @@ export const success = (
     status = 200
 
 ) => {
+console.log(data);
 
     return res.status(status).json({
 
@@ -43,4 +44,3 @@ export const paginated = (
     });
 
 };
-

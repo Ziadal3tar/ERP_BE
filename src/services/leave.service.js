@@ -26,7 +26,8 @@ const getEndOfDay = (date) => {
 class LeaveService {
 
     async createLeave(userId, data) {
-
+console.log(data)
+console.log(userId)
         const employee =
             await employeeRepository.findOne({
 

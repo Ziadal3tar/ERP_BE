@@ -105,7 +105,7 @@ export const updateProduct = asyncHandler(
 export const deleteProduct = asyncHandler(
     async (req, res) => {
 
-        await productService.deleteProduct(
+        const product =await productService.deleteProduct(
 
             req.params.id,
 
@@ -117,7 +117,7 @@ export const deleteProduct = asyncHandler(
 
             res,
 
-            null,
+            product,
 
             "Product deleted successfully"
 
